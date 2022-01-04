@@ -1,4 +1,4 @@
-const Logger = require('./logs');
+const Logger = require('./ls/logs');
 // const EventEmitter = require('events');
 
 // from constructor new instance
