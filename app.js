@@ -1,65 +1,20 @@
-const fs = require('fs');
+const Logger = require('./logs');
+// const EventEmitter = require('events');
 
-fs.readFile('./text.txt', 'utf-8', (err, data)=>{
-        fs.mkdirSync('./files', ()=>{});
-        fs.writeFileSync('./files/text2.txt', data, (err, data)=>{
-            if(err){
-                console.log(err);
-            }
-        })
+// from constructor new instance
+const logger = new Logger();
+
+// new instance
+// const emitter = new EventEmitter();
+
+//watch event
+logger.on('some_event', (args) => {
+    const {id, text} = args;
+
+    console.log(id,  text)
 })
-//1
 
-// fs.readFile('./text.txt', 'utf-8', async (err, data)=>{
-//         await fs.mkdir('./files', ()=>{});
-//         await fs.writeFile('./files/text2.txt', data, (err, data)=>{
-//             if(err){
-//                 console.log(err);
-//             }
-//         })
-    // if(err){
-    //     throw Error();
-    // } else {
-    //     fs.mkdir('./files', ()=>{
-    //         fs.writeFile('./files/text_2.txt', data, (err, data)=>{
-    //             if(err){
-    //                 throw new Error('Write file error '+ err);
-    //             }
-    //         })
-    //     })
-    //
-    // }
-// })
+// call event with args
+// emitter.emit('some_event', {id: 1, text: 'Some text'})
 
-// remove all files and folder
-setTimeout(()=>{
-    if(fs.existsSync('./files/text2.txt')){
-        fs.rm('./files',  { recursive: true }, (err)=>{
-            if(err){
-                console.log(err);
-            }
-        });
-    }
-}, 4000);
-
-// setTimeout(()=>{
-//     if(fs.existsSync('./files/text2.txt')){
-//         fs.unlink('./files/text2.txt', (err)=>{
-//             if(err){
-//                 console.log(err);
-//             }
-//         });
-//     }
-// }, 4000)
-//
-// setTimeout(()=>{
-//     if(fs.existsSync('./files')){
-//         fs.rmdir('./files', (err)=>{
-//             if(err){
-//                 console.log(err)
-//             }
-//         });
-//     }
-// }, 6000)
-
-console.log('First')
+logger.log('User logged');
