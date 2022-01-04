@@ -8,6 +8,7 @@ fs.readFile('./text.txt', 'utf-8', (err, data)=>{
             }
         })
 })
+//1
 
 // fs.readFile('./text.txt', 'utf-8', async (err, data)=>{
 //         await fs.mkdir('./files', ()=>{});
