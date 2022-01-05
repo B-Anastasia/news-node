@@ -1,6 +1,6 @@
 const http = require('http');
 const fs = require('fs');
-const path = require('path');
+const routes = require('./routes');
 
 const PORT = 3000;
 
@@ -12,32 +12,18 @@ const server = http.createServer((req, res)=>{
 
     console.log(__dirname);
 
-    const getPath = (page) => path.resolve(__dirname, 'views', `${page}.html`);
+    if(req.url === '/about-us') {
+        res.statusCode = 301;
+        res.setHeader('Location', '/contacts');
+        res.end();
+        return;
+    }
 
-    let basePath = '';
+    let basePath = routes.get(req.url);
 
-    switch (req.url) {
-        case '/':
-        case '/home':
-        case '/index.html':
-            basePath = getPath('index');
-            res.statusCode = 200;
-            break;
-
-            //redirect
-        case '/about-us':
-            res.statusCode = 301;
-            res.setHeader('Location', '/contacts');
-            res.end();
-            return;
-        case '/contacts':
-            basePath = getPath('contacts');
-            res.statusCode = 200;
-            break;
-        default:
-            basePath = getPath('error');
-            res.statusCode = 404;
-            break;
+    if(!basePath) {
+        basePath = routes.get('/error');
+        res.statusCode = 404;
     }
 
     console.log(basePath);
