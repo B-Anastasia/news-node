@@ -1,49 +1,32 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
 const routes = require('./routes');
+
+const app = express();
 
 const PORT = 3000;
 
-const server = http.createServer((req, res)=>{
-    console.log('Server request');
-    console.log('Server test');
-    console.log(req.url, req.method);
-
-    res.setHeader('Content-Type', 'text/html');
-
-    console.log(__dirname);
-
-    if(req.url === '/about-us') {
-        res.statusCode = 301;
-        res.setHeader('Location', '/contacts');
-        res.end();
-        return;
-    }
-
-    let basePath = routes.get(req.url);
-
-    if(!basePath) {
-        basePath = routes.get('/error');
-        res.statusCode = 404;
-    }
-
-    console.log(basePath);
-
-    fs.readFile(basePath, (err, data)=>{
-        if(err){
-            console.log(err);
-            res.statusCode = 500;
-        } else {
-            res.write(data);
-        }
-        res.end();
-    })
-})
-
-server.listen(PORT, 'localhost', (err)=>{
+app.listen(PORT, (err)=>{
     if(err){
         console.log(err);
     } else {
         console.log(`Listening port ${PORT}`);
     }
-})
+});
+
+app.get('/', (req, res)=>{
+    res.sendFile(routes.get('/'))
+});
+
+app.get('/contacts', (req, res)=>{
+    res.sendFile(routes.get('/contacts'))
+});
+
+app.get('/about-us', (req, res)=>{
+    res.redirect('/contacts');
+});
+
+app.use((req, res)=>{
+    res
+        .status(404)
+        .sendFile(routes.get('/error'))
+});
